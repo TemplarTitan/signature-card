@@ -1,0 +1,33 @@
+:host {
+	display: flex;
+	height: 100%;
+	flex-shrink: 0;
+}
+.cell {
+	display: flex;
+	align-items: center;
+	gap: var(--space-2);
+	padding: 0 var(--space-4);
+	height: 100%;
+	white-space: nowrap;
+}
+.cell-divider {
+	border-inline-end: 1px solid var(--dark-divider);
+}
+.cell-key {
+	font-family: var(--font-display);
+	font-size: var(--text-sm);
+	text-transform: uppercase;
+	letter-spacing: 0.12em;
+	color: var(--dark-text-dim);
+}
+.cell-val {
+	font-family: var(--font-mono);
+	font-size: var(--text-sm);
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: var(--dark-text-medium);
+}
+.cell-val.good {
+	color: var(--color-success-text);
+}

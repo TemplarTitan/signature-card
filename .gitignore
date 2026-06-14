@@ -1,0 +1,11 @@
+node_modules/
+pnpm-debug.log*
+.pnpm-store/
+
+*.private.md
+
+.DS_Store
+
+playwright/
+.playwright-mcp/
+.claude/

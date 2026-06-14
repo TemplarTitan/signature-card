@@ -1,0 +1,29 @@
+:host {
+	display: inline-block;
+	inline-size: 6rem;
+	block-size: 2rem;
+}
+.spark {
+	inline-size: 100%;
+	block-size: 100%;
+	overflow: visible;
+	--viz: var(--cyan);
+}
+.tone-accent  { --viz: var(--cyan); }
+.tone-success { --viz: var(--color-success); }
+.tone-warning { --viz: var(--color-warning); }
+.tone-danger  { --viz: var(--color-danger); }
+.tone-info    { --viz: var(--color-info); }
+.tone-neutral { --viz: var(--text-muted); }
+.spark-line {
+	fill: none;
+	stroke: var(--viz);
+	stroke-width: 1.5;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	vector-effect: non-scaling-stroke;
+}
+.spark-area {
+	fill: color-mix(in oklab, var(--viz) 18%, transparent);
+	stroke: none;
+}
