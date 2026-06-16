@@ -96,17 +96,17 @@ export function template(personName, personTitle, personCell) {
 						font-family:
 							'Helvetica Neue', Helvetica, Arial, sans-serif;
 						font-size: 12px;
-						font-size: 0.6875rem;
+						font-size: 0.7275rem;
 						font-size: clamp(
-							0.625rem,
-							0.525rem + 0.55vw,
-							0.6875rem
+							0.725rem,
+							0.625rem + 0.55vw,
+							0.7875rem
 						);
 						font-weight: 600;
 						letter-spacing: 0.22em;
 						text-transform: uppercase;
 						color: #c8102e;
-						margin: 0 0 0.8125rem 1px;
+						margin: 0 0 0.6125rem 1px;
 						text-wrap: balance;
 					"
 				>
@@ -148,14 +148,6 @@ export function template(personName, personTitle, personCell) {
 										overflow-wrap: anywhere;
 									"
 									><span
-										style="
-											color: #475467;
-											font-size: 9px;
-											font-size: 0.7em;
-											vertical-align: middle;
-										"
-										>&#9679;</span
-									>&nbsp;&nbsp;<span
 										style="vertical-align: middle"
 										>(800) 779-0332</span
 									></a
@@ -191,14 +183,6 @@ export function template(personName, personTitle, personCell) {
 									"
 									><span
 										style="
-											color: #475467;
-											font-size: 9px;
-											font-size: 0.7em;
-											vertical-align: middle;
-										"
-										>&#9679;</span
-									>&nbsp;&nbsp;<span
-										style="
 											vertical-align: middle;
 											text-transform: uppercase;
 										"
@@ -231,22 +215,15 @@ export function template(personName, personTitle, personCell) {
 										color: #124acd;
 										text-decoration: underline;
 										font-weight: bold;
-										letter-spacing: 0.09em;
+										letter-spacing: 0.15em;
 										word-break: break-word;
 										overflow-wrap: anywhere;
 										font-family:
 											Georgia, 'Times New Roman', serif;
+											text-underline-offset: 2px;
 									"
 									target="_blank"
 									><span
-										style="
-											color: #475467;
-											font-size: 9px;
-											font-size: 0.7em;
-											vertical-align: middle;
-										"
-										>&#9679;</span
-									>&nbsp;&nbsp;<span
 										style="
 											vertical-align: middle;
 											text-transform: uppercase;
@@ -308,6 +285,5 @@ export function template(personName, personTitle, personCell) {
 		</tr>
 	</tbody>
 </table>
-<br /><br />
-`;
+<br /><br />`;
 }

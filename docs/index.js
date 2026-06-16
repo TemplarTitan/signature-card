@@ -94,6 +94,11 @@ export class SignatureCreator extends WebComponent {
 				color: var(--text-muted, #6971a0);
 				margin-top: 0.5rem;
 			}
+			.brand,
+			.section-head,
+			.hint {
+				color: color-mix(in oklab, var(--text-main, #e8eaf2) 82%, var(--text-muted, #6971a0));
+			}
 			/* inputs inherit framework + theme */
 		`),
 	};
@@ -119,6 +124,7 @@ export class SignatureCreator extends WebComponent {
 	updateField(field, domEvent) {
 		const value = domEvent?.detail?.data?.value ?? domEvent?.target?.value ?? '';
 		this.state[field] = value;
+		this.generate();
 	}
 
 	updateName(domEvent) {
@@ -153,10 +159,12 @@ export class SignatureCreator extends WebComponent {
 		const ok = await this.copyText(text);
 		if (ok) {
 			this.state.copied = true;
-			this.setTimeout(() => {
-				this.state.copied = false;
-			}, 1600);
+			this.setTimeout(() => { this.clearCopied(); }, 1600);
 		}
+	}
+
+	clearCopied() {
+		this.state.copied = false;
 	}
 
 	selectCode() {
@@ -179,7 +187,7 @@ export class SignatureCreator extends WebComponent {
 		const workPosition = this.state.position;
 		const cellPhone = this.state.cell;
 		const code = this.state.code;
-		const copiedLabel = this.state.copied ? 'Copied!' : 'Copy HTML';
+		const copiedLabel = this.state.copied ? 'Copied!' : 'Copy Signature Code';
 
 		this.html`
 			<div class="wrap">
@@ -207,7 +215,7 @@ export class SignatureCreator extends WebComponent {
 
 						<ui-field .state=${{ label: 'Cell phone', help: 'Used for the tel: link and displayed in signature' }}>
 							<ui-input
-								.state=${{ value: cellPhone, placeholder: '(800) 779-0332', size: 'md', type: 'tel' }}
+								.state=${{ value: cellPhone, placeholder: '(800) 779-0332', size: 'md', type: 'text' }}
 								@input=${this.updateCell}
 							></ui-input>
 						</ui-field>
@@ -215,19 +223,16 @@ export class SignatureCreator extends WebComponent {
 
 					<div class="actions">
 						<ui-button
-							.state=${{ label: 'Generate', tone: 'primary', size: 'md' }}
-							@buttonClick=${this.generate}
-						></ui-button>
-						<ui-button
 							.state=${{ label: copiedLabel, tone: 'accent', size: 'md', disabled: !code }}
 							@buttonClick=${this.copyCode}
 						></ui-button>
 						<ui-button
 							.state=${{ label: 'Select', variant: 'outline', size: 'md', disabled: !code }}
+							?hidden=${true}
 							@buttonClick=${this.selectCode}
 						></ui-button>
 					</div>
-					<div class="hint">Edit fields above. Hit Generate to refresh the copyable HTML. Preview updates live.</div>
+					<div class="hint">Edit fields above — code and preview update live on every keystroke. Click Copy.</div>
 				</div>
 
 				<div class="section">
