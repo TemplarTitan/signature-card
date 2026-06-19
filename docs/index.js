@@ -9,6 +9,21 @@ function escapeHtml(str) {
 	});
 }
 
+/*
+ * Collapse the template's authoring whitespace at generation time so the COPIED
+ * signature is one compact line. template.js stays readable on purpose — every `>`
+ * is pulled onto its own line there, so no significant whitespace text node sits
+ * between elements; stripping the indentation cannot change how the signature renders.
+ */
+function compactHtml(html) {
+	return String(html)
+		.replace(/\s+/g, ' ') // flatten every newline/tab run to a single space
+		.replace(/>\s+/g, '>') // drop the indent that follows a tag
+		.replace(/\s+</g, '<') // drop the indent that precedes a tag
+		.replace(/\s+>/g, '>') // tighten the `\n>` that closes a multi-line open tag
+		.trim();
+}
+
 export class SignatureCreator extends WebComponent {
 	static id = 'signature-creator';
 	static url = import.meta.url;
@@ -42,6 +57,20 @@ export class SignatureCreator extends WebComponent {
 				font-weight: 600;
 				letter-spacing: -0.01em;
 			}
+			.instructions {
+				font-size: clamp(1.5rem, 1rem + 1.8vw, 1.5rem);
+				font-weight: 700;
+				line-height: 1.3;
+				letter-spacing: -0.01em;
+				margin: 0 0 1.75rem;
+				text-wrap: balance;
+				text-align: center;
+				text-transform: uppercase;
+			}
+			.instructions b {
+				color: var(--teal, #6d4aff);
+				font-weight: 700;
+			}
 			.panel {
 				background: var(--bg-panel, #0c0d12);
 				border: 1px solid var(--border-light-color, rgba(255,255,255,0.1));
@@ -69,19 +98,17 @@ export class SignatureCreator extends WebComponent {
 				box-shadow: 0 0.25rem 1rem rgba(0,0,0,0.15);
 				overflow: auto;
 			}
-			textarea.code {
+			input.code {
 				width: 100%;
-				min-height: 14rem;
 				font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 				font-size: 0.75rem;
 				line-height: 1.45;
-				padding: 1rem;
+				padding: 0.6rem 0.75rem;
 				border-radius: 0.5rem;
 				background: var(--bg-dark, #050608);
 				color: var(--text-offwhite, #adb4cc);
 				border: 1px solid var(--border-light-color, rgba(255,255,255,0.1));
-				resize: vertical;
-				white-space: pre;
+				text-overflow: ellipsis;
 			}
 			.actions {
 				display: flex;
@@ -147,8 +174,11 @@ export class SignatureCreator extends WebComponent {
 	buildSignatureHtml() {
 		const personName = escapeHtml((this.state.name || '').trim() || 'Your Name');
 		const personTitle = escapeHtml((this.state.position || '').trim() || 'Your Position');
-		const personCell = escapeHtml((this.state.cell || '').trim() || '(800) 779-0332');
-		return template(personName, personTitle, personCell);
+		const rawCell = (this.state.cell || '').trim() || '(800) 779-0332';
+		const personCell = escapeHtml(rawCell);
+		// tel: href must be dialable digits only — strip spaces, parens, dashes, +, etc.
+		const personCellHref = rawCell.replace(/\D/g, '');
+		return compactHtml(template(personName, personTitle, personCell, personCellHref));
 	}
 
 	async copyCode() {
@@ -187,7 +217,7 @@ export class SignatureCreator extends WebComponent {
 		const workPosition = this.state.position;
 		const cellPhone = this.state.cell;
 		const code = this.state.code;
-		const copiedLabel = this.state.copied ? 'Copied!' : 'Copy Signature Code';
+		const copiedLabel = this.state.copied ? 'Copied!' : 'Click to Copy Signature Code';
 
 		this.html`
 			<div class="wrap">
@@ -195,7 +225,10 @@ export class SignatureCreator extends WebComponent {
 					<span class="brand">TEMPLAR TITAN</span>
 					<span class="title">Signature Creator</span>
 				</div>
-
+				<hr />
+				<p class="instructions">
+					Fill in details, hit <b>Copy Signature Code</b>, then paste the HTML signature into your email app.
+				</p>
 				<div class="panel">
 					<div class="section-head">Your details</div>
 					<ui-stack .state=${{ direction: 'column', gap: 'md' }}>
@@ -232,7 +265,6 @@ export class SignatureCreator extends WebComponent {
 							@buttonClick=${this.selectCode}
 						></ui-button>
 					</div>
-					<div class="hint">Edit fields above — code and preview update live on every keystroke. Click Copy.</div>
 				</div>
 
 				<div class="section">
@@ -243,17 +275,17 @@ export class SignatureCreator extends WebComponent {
 				</div>
 
 				<div class="section">
-					<div class="section-head">Signature HTML (copy into your email client)</div>
+					<div class="section-head">CLICK THE COPY BUTTON ABOVE - DO NOT TRY TO MANUALLY COPY</div>
 					<div class="panel">
-						<textarea
+						<input
 							#code
+							type="text"
 							class="code"
 							readonly
 							.value=${code}
 							@click=${this.selectCode}
 							aria-label="Generated signature HTML code"
-						></textarea>
-						<div class="hint">Click the textarea to select all. Use the Copy button for clipboard.</div>
+						/>
 					</div>
 				</div>
 			</div>

@@ -1,4 +1,4 @@
-export function template(personName, personTitle, personCell) {
+export function template(personName, personTitle, personCell, personCellHref) {
 	return `<table
 	role="presentation"
 	border="0"
@@ -173,7 +173,7 @@ export function template(personName, personTitle, personCell) {
 								"
 							>
 								<a
-									href="tel:${personCell}"
+									href="tel:${personCellHref}"
 									style="
 										color: #475467;
 										text-decoration: none;
