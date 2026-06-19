@@ -109,6 +109,10 @@ export class SignatureCreator extends WebComponent {
 				color: var(--text-offwhite, #adb4cc);
 				border: 1px solid var(--border-light-color, rgba(255,255,255,0.1));
 				text-overflow: ellipsis;
+				/* Normal arrow cursor (not the text I-beam) while still fully selectable —
+				   one click selects the whole signature for copying. */
+				cursor: default;
+				user-select: all;
 			}
 			.actions {
 				display: flex;
