@@ -223,7 +223,7 @@ export class SignatureCreator extends WebComponent {
 
 					<div class="actions">
 						<ui-button
-							.state=${{ label: copiedLabel, tone: 'accent', size: 'md', disabled: !code }}
+							.state=${{ label: copiedLabel, tone: 'primary', size: 'md', disabled: !code }}
 							@buttonClick=${this.copyCode}
 						></ui-button>
 						<ui-button
